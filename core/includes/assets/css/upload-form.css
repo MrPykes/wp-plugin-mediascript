@@ -1,0 +1,41 @@
+form#UploadForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+#UploadForm table,
+#FileInputDetails tr {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+#FileInputDetails p,
+#FileInputDetails button {
+  padding: 0;
+}
+.hide {
+  display: none;
+}
+
+table#transcribe-content {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#transcribe-content td,
+#transcribe-content th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+#transcribe-content tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+#transcribe-content a {
+  color: #2271b1;
+  font-size: 13px;
+  padding: 2px 0 0;
+}
