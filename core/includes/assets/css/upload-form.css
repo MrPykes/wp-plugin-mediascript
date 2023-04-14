@@ -31,10 +31,11 @@ table#transcribe-content {
 }
 
 #transcribe-content tr:nth-child(even) {
-  background-color: #dddddd;
+  /* background-color: #dddddd; */
 }
 
-#transcribe-content a {
+#transcribe-content a,
+#FileInputDetails a {
   color: #2271b1;
   font-size: 13px;
   padding: 2px 0 0;

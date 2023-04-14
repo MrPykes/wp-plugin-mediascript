@@ -15,12 +15,12 @@
         if ($query->have_posts()) {
             while ($query->have_posts()) {
                 $query->the_post();
-                printf('<tr>');
+                printf('<tr id="%d">', get_the_ID());
                 printf('<th>
                             <span>%s<span>
                             <div class="row-actions">
                                 <a href="/files/edit?id=' . get_the_ID() . '">Edit</a></span>
-                                <span><a href="">Delete</a></span>
+                                <span><a id="delete" data-id="' . get_the_ID() . '" href="">Delete</a></span>
                                 <span><a href="/wp-content/uploads/transcribe/' . get_the_title() . '" download="' . get_the_title() . '">download</a></span>
                             </div>
                         </th>', get_the_title());

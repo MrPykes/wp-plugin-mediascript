@@ -54,6 +54,8 @@ class Transcribe_Run
 
 		add_action('admin_post_nopriv_UploadForm', array($this, 'UploadForm_form_submit'));
 		add_action('admin_post_UploadForm', array($this, 'UploadForm_form_submit'));
+		add_action('wp_ajax_delete_transcribe', array($this, 'delete_transcribe'));
+		add_action('wp_ajax_nopriv_delete_transcribe', array($this, 'delete_transcribe'));
 	}
 
 	function register_page()
@@ -140,12 +142,17 @@ class Transcribe_Run
 		$ver = strtotime(date('Y-m-d H:i:s'));
 		wp_enqueue_style('upload-form-styles', TRANSCRIBE_PLUGIN_URL . 'core/includes/assets/css/upload-form.css', array(), $ver, 'all');
 		wp_enqueue_script('upload-form-js', TRANSCRIBE_PLUGIN_URL . 'core/includes/assets/js/upload-form.js', array('jquery'), $ver, false);
-		wp_localize_script('upload-form-js', 'ajax', array('ajaxurl' => admin_url('admin-ajax.php')));
+		wp_localize_script('upload-form-js', 'myAjax', array('ajaxurl' => admin_url('admin-ajax.php')));
 	}
 
 	function UploadForm_form_submit()
 	{
 		$temp_name = $_FILES['FileInput']['tmp_name'];
+		$ext = pathinfo($_FILES["FileInput"]["name"][1], PATHINFO_EXTENSION);
+		$filename = pathinfo($_FILES['FileInput']['name'][1], PATHINFO_FILENAME);
+		echo "<pre>";
+		print_r($filename);
+		echo "</pre>";
 		echo "<pre>";
 		print_r($_FILES);
 		echo "</pre>";
@@ -195,5 +202,18 @@ class Transcribe_Run
 		}
 		wp_redirect(site_url('/files/'));
 		die();
+	}
+
+	function delete_transcribe()
+	{
+		$id = $_POST['id'];
+		$post = get_post($id);
+
+		$uploads_dir = trailingslashit(wp_upload_dir()['basedir']) . 'transcribe';
+		$path = $uploads_dir . '/' . $post->post_title;
+		unlink($path);
+		wp_delete_post($_POST['id']);
+		echo $_POST['id'];
+		wp_die();
 	}
 }

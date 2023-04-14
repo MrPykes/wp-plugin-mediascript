@@ -1,32 +1,37 @@
+function bytesToSize(bytes) {
+  var sizes = ["B", "K", "M", "G", "T", "P"];
+  for (var i = 0; i < sizes.length; i++) {
+    if (bytes <= 1024) {
+      return bytes + " " + sizes[i];
+    } else {
+      bytes = parseFloat(bytes / 1024).toFixed(2);
+    }
+  }
+  return bytes + " P";
+}
+
 function FileInputHandler(event) {
   var Files = document.getElementById("FileInput").files;
   console.log("files", Files);
   for (var i = 0; i < Files.length; i++) {
     var File = Files[i];
+    var file_name = File.name;
+    console.log("file_name", file_name.split(".").shift());
+    console.log("ext", file_name.split(".").pop());
     jQuery("table#FileInputDetails tbody").append(
       `
       <tr>
-  		<td>
-        <div>
-          <span>${File.name}</span>
-          <div class="row-actions">
-            <span><a href="">Edit</a></span>
-            <span><a href="">Delete</a></span>
-          </div>
-        </div>
+      <td>
+          <input type="text"class="duration" name="file_name[]" value="${file_name
+            .split(".")
+            .shift()}"/>
+      </td> 
+      <td>
+        <span>${bytesToSize(File.size)}</span>
         <div class="hide">
-          <input type="text"class="duration" name="file_name[]" value="${File.name}"/>
-          <p>
-          <small><input class="button" type="button" name="cancel" value="Cancel"/></small>
-          <small><input class="button" type="button" name="save" value="Save"/></small>
-          </p>
-        </div>
-
-      </td>
-  		<td>
-        <p>${File.size}</p>
-        <div class="hide">
-          <input type="number"class="duration" name="file_size[]" value="${File.size}"/>
+          <input type="number"class="duration" name="file_size[]" value="${
+            File.size
+          }"/>
         </div>
       </td>
       <td class="Upload_Duration">
@@ -41,7 +46,32 @@ function FileInputHandler(event) {
     jQuery("#FileInput").addClass("hide");
   }
 }
-
-jQuery(".duration").on("keyup", function () {
-  console.log(jQuery(this).value);
+jQuery(document).ready(function () {
+  jQuery(".duration").on("keyup", function () {
+    console.log(jQuery(this).value);
+  });
+  jQuery("a#delete").map((index, param) => {
+    jQuery(param).on("click", function (e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append("action", "delete_transcribe");
+      fd.append("id", jQuery(this).data("id"));
+      jQuery.ajax({
+        type: "POST",
+        dataType: "html",
+        url: myAjax.ajaxurl,
+        data: fd,
+        contentType: false,
+        processData: false,
+        success: function (id) {
+          const tr = jQuery("tr#" + id);
+          tr.animate({ opacity: "0" }, 150, function () {
+            tr.animate({ height: "0px" }, 150, function () {
+              tr.remove();
+            });
+          });
+        },
+      });
+    });
+  });
 });
