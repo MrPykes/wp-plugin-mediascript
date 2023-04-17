@@ -24,6 +24,7 @@
             $hour = $duration['hour'];
             $minute = $duration['minute'];
             $second = $duration['second'];
+
             ?>
             <tr>
                 <td>
