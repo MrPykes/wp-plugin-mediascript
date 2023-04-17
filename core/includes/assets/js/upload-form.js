@@ -22,9 +22,7 @@ function FileInputHandler(event) {
       `
       <tr>
       <td>
-          <input type="text"class="duration" name="file_name[]" value="${file_name
-            .split(".")
-            .shift()}"/>
+          <input type="text"class="duration" name="file_name[]" value="${file_name}"/>
       </td> 
       <td>
         <span>${bytesToSize(File.size)}</span>

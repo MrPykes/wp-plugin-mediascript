@@ -54,10 +54,21 @@ class Transcribe_Run
 
 		add_action('admin_post_nopriv_UploadForm', array($this, 'UploadForm_form_submit'));
 		add_action('admin_post_UploadForm', array($this, 'UploadForm_form_submit'));
+		add_action('admin_post_nopriv_UpdateForm', array($this, 'UpdateForm_form_submit'));
+		add_action('admin_post_UpdateForm', array($this, 'UpdateForm_form_submit'));
 		add_action('wp_ajax_delete_transcribe', array($this, 'delete_transcribe'));
 		add_action('wp_ajax_nopriv_delete_transcribe', array($this, 'delete_transcribe'));
+		add_action('init', array($this, 'add_query_vars'));
 	}
-
+	function add_query_vars()
+	{
+		add_filter('query_vars', array($this, 'add_query_vars_filter'));
+	}
+	function add_query_vars_filter($vars)
+	{
+		$vars[] = "qwe";
+		return $vars;
+	}
 	function register_page()
 	{
 		$page_files = get_page_by_path('files', OBJECT, 'page');
@@ -148,45 +159,37 @@ class Transcribe_Run
 	function UploadForm_form_submit()
 	{
 		$temp_name = $_FILES['FileInput']['tmp_name'];
-		$ext = pathinfo($_FILES["FileInput"]["name"][1], PATHINFO_EXTENSION);
-		$filename = pathinfo($_FILES['FileInput']['name'][1], PATHINFO_FILENAME);
-		echo "<pre>";
-		print_r($filename);
-		echo "</pre>";
-		echo "<pre>";
-		print_r($_FILES);
-		echo "</pre>";
-		die();
-		// $temp_name = $_FILES['FileInput']['tmp_name'];
+		$fileInputName = $_FILES['FileInput']['name'];
 		$file_name = $_POST['file_name'];
 		$file_size = $_POST['file_size'];
-		$file_type = $_POST['file_type'];
 		$Duration_hr = $_POST['Duration_hr'];
 		$Duration_min = $_POST['Duration_min'];
 		$Duration_sec = $_POST['Duration_sec'];
+		$email = $_POST['email'];
 		$project = $_POST['project'];
 		$story = $_POST['story'];
 		$client = $_POST['client'];
-		$TranscriptEmail = $_POST['TranscriptEmail'];
 		$UploadFileOptions = $_POST['UploadFileOptions'];
-		$target_dir = wp_upload_dir();
 		$uploads_dir = trailingslashit(wp_upload_dir()['basedir']) . 'transcribe';
 		wp_mkdir_p($uploads_dir);
 		for ($i = 0; $i < count($temp_name); $i++) {
-			// if (file_exists($uploads_dir . '/' . $file_name[$i])) {
-			// }
+			$title = pathinfo($fileInputName[$i], PATHINFO_FILENAME);
+			$ext = pathinfo($fileInputName[$i], PATHINFO_EXTENSION);
+			$fileUploadName = $title . '-' . strtotime(date("Y/m/d H:i:s")) . '.' . $ext;
 			$args = array(
-				'post_title' => $file_name[$i],
+				'post_title' => $title,
 				'post_type' => 'transcribe',
 				'post_status' => 'publish',
 				'meta_input'        => array(
+					'file_name'     => $fileUploadName,
 					'file_size'     => $file_size[$i],
-					'file_type'		=> $file_type[$i],
+					'file_type'		=> $ext,
 					'duration'     => array(
-						'hour' => $Duration_hr,
-						'minute' => $Duration_min,
-						'second' => $Duration_sec,
+						'hour' => $Duration_hr[$i],
+						'minute' => $Duration_min[$i],
+						'second' => $Duration_sec[$i],
 					),
+					'email'     => $email,
 					'project'     => $project,
 					'story'     => $story,
 					'client'     => $client,
@@ -197,9 +200,46 @@ class Transcribe_Run
 			if (is_wp_error($post_id)) {
 				echo $post_id->get_error_message();
 			} else {
-				move_uploaded_file($temp_name[$i], $uploads_dir . '/' . $file_name[$i]);
+				move_uploaded_file($temp_name[$i], $uploads_dir . '/' . $fileUploadName);
 			}
 		}
+		wp_redirect(site_url('/files/'));
+		die();
+	}
+	function UpdateForm_form_submit()
+	{
+
+		$id = $_POST['id'];
+		$file_name = $_POST['file_name'];
+		$Duration_hr = $_POST['Duration_hr'];
+		$Duration_min = $_POST['Duration_min'];
+		$Duration_sec = $_POST['Duration_sec'];
+		$email = $_POST['email'];
+		$project = $_POST['project'];
+		$story = $_POST['story'];
+		$client = $_POST['client'];
+		$UploadFileOptions = $_POST['UploadFileOptions'];
+
+		$args = array(
+			'ID'            => $id,
+			'post_title' => $file_name,
+			'post_type' => 'transcribe',
+			'post_status' => 'publish',
+			'meta_input'        => array(
+				'duration'     => array(
+					'hour' => $Duration_hr,
+					'minute' => $Duration_min,
+					'second' => $Duration_sec,
+				),
+				'email'     => $email,
+				'project'     => $project,
+				'story'     => $story,
+				'client'     => $client,
+				'option'     => $UploadFileOptions,
+			),
+		);
+		wp_update_post($args);
+
 		wp_redirect(site_url('/files/'));
 		die();
 	}
@@ -208,9 +248,10 @@ class Transcribe_Run
 	{
 		$id = $_POST['id'];
 		$post = get_post($id);
+		$fileUploadName = get_post_meta($id, 'file_name', true);
 
 		$uploads_dir = trailingslashit(wp_upload_dir()['basedir']) . 'transcribe';
-		$path = $uploads_dir . '/' . $post->post_title;
+		$path = $uploads_dir . '/' . $fileUploadName;
 		unlink($path);
 		wp_delete_post($_POST['id']);
 		echo $_POST['id'];

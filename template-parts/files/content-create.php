@@ -19,7 +19,7 @@
         <input class="button" type="text" name="client" id="client" placeholder="Client Name" />
     </div>
 
-    <input class="button" type="text" name="TranscriptEmail" id="TranscriptEmail" placeholder="Transcript to be emailed to" />
+    <input class="button" type="text" name="email" id="email" placeholder="Transcript to be emailed to" />
 
     <select name="UploadFileOptions" id="UploadFileOptions" onchange="eeSelectOptions(this)">
         <option value="standard">Standard</option>
