@@ -82,8 +82,30 @@ class Transcribe_Settings
 			'add-new-file',
 			array($this, 'add_new_transcribe_page'),
 		);
+		add_submenu_page(
+			'transcribe',
+			__('Settings', 'transcribe'),
+			__('Settings', 'transcribe'),
+			'manage_options',
+			'settings',
+			array($this, 'settings_page'),
+		);
 	}
 
+	function settings_page()
+	{
+		ob_start();
+		$email = get_option('transcribe_email');
+?>
+		<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" name="SettingsForm" id="SettingsForm" enctype="multipart/form-data">
+			<input type="text" name="email" placeholder="Please Input Email!" value="<?php echo $email ?>">
+			<input type="hidden" name="action" value="SettingsForm">
+			<button type="submit" class="button eeButton" name="settings_form" id="settings_form">Update</button>
+
+		</form>
+<?php
+		echo ob_get_clean();
+	}
 	function transcribe_page()
 	{
 		echo "test";

@@ -54,8 +54,13 @@ class Transcribe_Run
 
 		add_action('admin_post_nopriv_UploadForm', array($this, 'UploadForm_form_submit'));
 		add_action('admin_post_UploadForm', array($this, 'UploadForm_form_submit'));
+
 		add_action('admin_post_nopriv_UpdateForm', array($this, 'UpdateForm_form_submit'));
 		add_action('admin_post_UpdateForm', array($this, 'UpdateForm_form_submit'));
+
+		add_action('admin_post_nopriv_SettingsForm', array($this, 'SettingsForm_form_submit'));
+		add_action('admin_post_SettingsForm', array($this, 'SettingsForm_form_submit'));
+
 		add_action('wp_ajax_delete_transcribe', array($this, 'delete_transcribe'));
 		add_action('wp_ajax_nopriv_delete_transcribe', array($this, 'delete_transcribe'));
 		add_action('init', array($this, 'add_query_vars'));
@@ -256,5 +261,12 @@ class Transcribe_Run
 		wp_delete_post($_POST['id']);
 		echo $_POST['id'];
 		wp_die();
+	}
+	function SettingsForm_form_submit()
+	{
+		update_option('transcribe_email', $_POST['email']);
+		echo "<pre>";
+		print_r(get_option('transcribe_email'));
+		echo "</pre>";
 	}
 }

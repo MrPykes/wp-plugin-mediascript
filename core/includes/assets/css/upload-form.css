@@ -1,9 +1,11 @@
-form#UploadForm {
+form#UploadForm,
+form#UpdateForm {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 #UploadForm table,
+#UpdateForm table,
 #FileInputDetails tr {
   border: 1px solid black;
   border-collapse: collapse;

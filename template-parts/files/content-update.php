@@ -1,4 +1,4 @@
-<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" name="UploadForm" id="UploadForm" enctype="multipart/form-data">
+<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" name="UpdateForm" id="UpdateForm" enctype="multipart/form-data">
     <h2 class="UploadFilesTitle">Update Files</h2>
     <table id="FileInputDetails" class="">
         <thead>
@@ -35,9 +35,9 @@
                     </div>
                 </td>
                 <td>
-                    <div class="">
-                        <input type="text" disabled class="duration" name="file_size" value="<?php echo sizeFilter($file_size) ?>" />
-                    </div>
+                    <span><?php echo sizeFilter($file_size) ?></span>
+                    <!-- <input type="text" disabled class="duration" name="file_size" value="" /> -->
+
                 </td>
                 <td>
                     <div>
@@ -47,22 +47,22 @@
                     </div>
                 </td>
             </tr>
-            <tr>
-                <div>
-                    <input class="button" type="text" name="project" id="project" value="<?php echo $project ?>" placeholder="Project" />
-                    <input class="button" type="text" name="story" id="story" value="<?php echo $story ?>" placeholder="Story" />
-                    <input class="button" type="text" name="client" id="client" value="<?php echo $client ?>" placeholder="Client" />
-                </div>
-
-                <input class="button" type="text" name="email" id="email" value="<?php echo $email ?>" placeholder="Transcript to be emailed to" />
-
-                <select name="UploadFileOptions" id="UploadFileOptions">
-                    <option value="standard" <?php echo $option == 'standard' ? 'selected' : '' ?>>Standard</option>
-                    <option value="urgent" <?php echo $option == 'urgent' ? 'selected' : '' ?>>Urgent</option>
-                </select>
-            </tr>
         </tbody>
     </table>
+
+    <div>
+        <input class="button" type="text" name="project" id="project" value="<?php echo $project ?>" placeholder="Project" />
+        <input class="button" type="text" name="story" id="story" value="<?php echo $story ?>" placeholder="Story" />
+        <input class="button" type="text" name="client" id="client" value="<?php echo $client ?>" placeholder="Client" />
+    </div>
+
+    <input class="button" type="text" name="email" id="email" value="<?php echo $email ?>" placeholder="Transcript to be emailed to" />
+
+    <select name="UploadFileOptions" id="UploadFileOptions">
+        <option value="standard" <?php echo $option == 'standard' ? 'selected' : '' ?>>Standard</option>
+        <option value="urgent" <?php echo $option == 'urgent' ? 'selected' : '' ?>>Urgent</option>
+    </select>
+
     <input type="hidden" name="action" value="UpdateForm">
 
     <button type="submit" class="button eeButton" name="update" id="update">Update</button>
