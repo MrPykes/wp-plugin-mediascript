@@ -177,10 +177,19 @@ class Transcribe_Run
 		$UploadFileOptions = $_POST['UploadFileOptions'];
 		$uploads_dir = trailingslashit(wp_upload_dir()['basedir']) . 'transcribe';
 		wp_mkdir_p($uploads_dir);
+		$durations = array();
 		for ($i = 0; $i < count($temp_name); $i++) {
 			$title = pathinfo($fileInputName[$i], PATHINFO_FILENAME);
 			$ext = pathinfo($fileInputName[$i], PATHINFO_EXTENSION);
 			$fileUploadName = $title . '-' . strtotime(date("Y/m/d H:i:s")) . '.' . $ext;
+			$hr = $Duration_hr[$i] ? $Duration_hr[$i] . ' : ' : "";
+			$mn = $Duration_min[$i] ? $Duration_min[$i] . ' : ' : 00;
+			$sc = $Duration_sec[$i] ? $Duration_sec[$i] : 00;
+			$file_data[] = array(
+				'file_name'	=> $fileInputName[$i],
+				'file_size'	=> sizeFilter($file_size[$i]),
+				'durations' => $hr . $mn . $sc,
+			);
 			$args = array(
 				'post_title' => $title,
 				'post_type' => 'transcribe',
@@ -208,6 +217,13 @@ class Transcribe_Run
 				move_uploaded_file($temp_name[$i], $uploads_dir . '/' . $fileUploadName);
 			}
 		}
+
+		ob_start();
+		include_once TRANSCRIBE_PLUGIN_DIR . 'template-parts/mail/new-upload-notification.php';
+		$content = ob_get_clean();
+
+		wp_mail(get_option('uploaders_new_upload_email'), 'New File(s) Uploaded', $content);
+
 		wp_redirect(site_url('/files/'));
 		die();
 	}
@@ -264,9 +280,8 @@ class Transcribe_Run
 	}
 	function SettingsForm_form_submit()
 	{
-		update_option('transcribe_email', $_POST['email']);
-		echo "<pre>";
-		print_r(get_option('transcribe_email'));
-		echo "</pre>";
+		update_option('uploaders_new_upload_email', $_POST['email']);
+		wp_redirect(admin_url('admin.php?page=settings'));
+		// wp_die();
 	}
 }

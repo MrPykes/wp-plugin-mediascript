@@ -95,7 +95,7 @@ class Transcribe_Settings
 	function settings_page()
 	{
 		ob_start();
-		$email = get_option('transcribe_email');
+		$email = get_option('uploaders_new_upload_email');
 ?>
 		<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" name="SettingsForm" id="SettingsForm" enctype="multipart/form-data">
 			<input type="text" name="email" placeholder="Please Input Email!" value="<?php echo $email ?>">
