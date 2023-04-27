@@ -280,7 +280,9 @@ class Transcribe_Run
 	}
 	function SettingsForm_form_submit()
 	{
-		update_option('uploaders_new_upload_email', $_POST['email']);
+		update_option('uploaders_new_upload_email', $_POST['new_upload_email']);
+		update_option('uploaders_new_user_email', $_POST['new_user_email']);
+		update_option('uploaders_loggedin_user_email', $_POST['loggedin_user_email']);
 		wp_redirect(admin_url('admin.php?page=settings'));
 		// wp_die();
 	}
