@@ -37,6 +37,7 @@ class Transcribe_List_Table extends WP_List_Table
             'client' => __('Client', 'transcribe'),
             'option' => __('Option', 'transcribe'),
             'duration' => __('Duration', 'transcribe'),
+            'uploader' => __('Uploader', 'transcribe'),
             'assigned_staff_user' => __('Assign to Staff User', 'transcribe')
         );
     }
@@ -58,6 +59,7 @@ class Transcribe_List_Table extends WP_List_Table
             'client' => array('client', false),
             'option' => array('option', false),
             'duration' => array('duration', false),
+            'uploader' => array('uploader', false),
         );
     }
 
@@ -76,7 +78,8 @@ class Transcribe_List_Table extends WP_List_Table
             'story',
             'client',
             'option',
-            'duration'
+            'duration',
+            'uploader'
         );
 
         // Define the query arguments
@@ -110,6 +113,9 @@ class Transcribe_List_Table extends WP_List_Table
                 $duration .= $meta['duration']['second'];
             }
 
+            if ($post->post_author) {
+                $uploader = get_user_meta($post->post_author, 'first_name', true) . ' ' . get_user_meta($post->post_author, 'last_name', true);
+            }
             // Build the row data array
             $data[] = array(
                 'id' => $post->ID,
@@ -121,8 +127,9 @@ class Transcribe_List_Table extends WP_List_Table
                 'project' => $meta['project'],
                 'story' => $meta['story'],
                 'client' => $meta['client'],
-                'option' => $meta['option'],
-                'duration' => $duration
+                'option' => ucwords($meta['option']),
+                'duration' => $duration,
+                'uploader' => $uploader,
             );
         }
 
@@ -156,23 +163,27 @@ class Transcribe_List_Table extends WP_List_Table
     {
         switch ($column_name) {
             case 'title':
-                return $item->post_title;
+                return $item['title'];
             case 'file_name':
-                return get_post_meta($item['id'], 'file_name', true);
+                return $item['file_name'];
             case 'file_size':
-                return get_post_meta($item['id'], 'file_size', true);
+                return $item['file_size'];
             case 'file_type':
-                return get_post_meta($item['id'], 'file_type', true);
+                return $item['file_type'];
             case 'email':
-                return get_post_meta($item['id'], 'email', true);
+                return $item['email'];
             case 'project':
-                return get_post_meta($item['id'], 'project', true);
+                return $item['project'];
             case 'story':
-                return get_post_meta($item['id'], 'story', true);
+                return $item['story'];
             case 'client':
-                return get_post_meta($item['id'], 'client', true);
+                return $item['client'];
             case 'option':
-                return get_post_meta($item['id'], 'option', true);
+                return $item['option'];
+            case 'duration':
+                return $item['duration'];
+            case 'uploader':
+                return $item['uploader'];
             case 'assigned_staff_user':
                 $assigned_user_id = get_post_meta($item['id'], 'assigned_staff_user', true);
                 $assigned_user = get_userdata($assigned_user_id);

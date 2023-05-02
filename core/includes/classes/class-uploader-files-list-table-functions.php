@@ -54,7 +54,7 @@ class Uploaders_File_List_Table_Function
 
     function handle_custom_column_actions()
     {
-        if (isset($_REQUEST['action']) && $_REQUEST['staff_user'] == 'true') {
+        if (isset($_REQUEST['action']) && isset($_REQUEST['staff_user']) && $_REQUEST['staff_user'] == 'true') {
             $post_id = intval($_REQUEST['post_id']);
             $staff_users = get_users(['role__in' => ['staff']]);
             $assigned_user = get_post_meta($post_id, 'assigned_staff_user', true);

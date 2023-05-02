@@ -51,8 +51,8 @@ class Transcribe_Settings
 		add_action('admin_menu', array($this, 'register_transcribe_page'));
 		add_action('init', array($this, 'register_custom_post_type'));
 		add_action('init', array($this, 'create_custom_role'));
-		// add_action('init', array($this, 'user_role_restricted'));
-		// add_action('after_setup_theme', array($this, 'remove_admin_bar'));
+		add_action('init', array($this, 'user_role_restricted'));
+		add_action('after_setup_theme', array($this, 'remove_admin_bar'));
 	}
 
 	function create_custom_role()
@@ -111,14 +111,14 @@ class Transcribe_Settings
 			'dashicons-book',
 			6
 		);
-		add_submenu_page(
-			'transcribe',
-			__('Add New', 'transcribe'),
-			__('Add New', 'transcribe'),
-			'manage_options',
-			'add-new-file',
-			array($this, 'add_new_transcribe_page'),
-		);
+		// add_submenu_page(
+		// 	'transcribe',
+		// 	__('Add New', 'transcribe'),
+		// 	__('Add New', 'transcribe'),
+		// 	'manage_options',
+		// 	'add-new-file',
+		// 	array($this, 'add_new_transcribe_page'),
+		// );
 		add_submenu_page(
 			'transcribe',
 			__('Settings', 'transcribe'),
@@ -137,19 +137,6 @@ class Transcribe_Settings
 	}
 	function transcribe_page()
 	{
-		// ob_start();
-		// include_once TRANSCRIBE_PLUGIN_DIR . 'template-parts/files/content-files.php';
-		// echo ob_get_clean();
-		// ob_start();
-		// echo '<div class="wrap"><h2>All File List</h2>';
-		// echo '<form method="POST">';
-		// // $uploader_all_file_list = new Uploader_All_File_List_Table();
-		// // $uploader_all_file_list->prepare_items();
-		// // $uploader_all_file_list->display();
-		// $transcribe_list_table = new Transcribe_List_Table();
-		// $transcribe_list_table->prepare_items();
-		// $transcribe_list_table->display();
-		// echo ' </form>';
 		$transcribe_list_table = new Transcribe_List_Table();
 		$transcribe_list_table->prepare_items();
 ?>

@@ -1,4 +1,21 @@
-<a href="/files/new">Add New</a>
+<?php
+$user = wp_get_current_user();
+$args_ = array();
+$roles = (array) $user->roles;
+if ($roles[0] == 'staff') {
+    printf('<a href="/files/new">Add New</a>');
+    $args_['meta_query'] = array(
+        array(
+            'key' => 'assigned_staff_user',
+            'value' => get_current_user_id(),
+            'compare' => '=',
+        )
+    );
+} elseif (($roles[0] == 'uploader')) {
+    $args_['author__in'] = array(get_current_user_id());
+}
+?>
+
 <table id="transcribe-content">
     <thead>
         <th>Name</th>
@@ -8,14 +25,15 @@
     <tbody>
         <?php
         global $post;
+
         $uploads_dir = trailingslashit(wp_upload_dir()['basedir']) . 'transcribe';
         $args = array(
             'post_type' => 'transcribe',
-            'author__in' => array(get_current_user_id())
+            'post_per_page' => -1,
+            // 'author__in' => array(get_current_user_id())
+
         );
-        // echo "<pre>qwe ";
-        // print_r();
-        // echo "</pre>";
+        $args = array_merge($args_, $args);
         $query = new WP_Query($args);
         if ($query->have_posts()) {
             while ($query->have_posts()) {

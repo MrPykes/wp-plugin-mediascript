@@ -115,18 +115,27 @@ class Transcribe_Run
 
 	function files_page()
 	{
+		if (!is_user_logged_in()) {
+			wp_redirect(home_url());
+		}
 		ob_start();
 		include_once TRANSCRIBE_PLUGIN_DIR . 'template-parts/files/content-files.php';
 		return ob_get_clean();
 	}
 	function add_page()
 	{
+		if (!is_user_logged_in()) {
+			wp_redirect(home_url());
+		}
 		ob_start();
 		include_once TRANSCRIBE_PLUGIN_DIR . 'template-parts/files/content-create.php';
 		return ob_get_clean();
 	}
 	function edit_page()
 	{
+		if (!is_user_logged_in() || !isset($_GET['id'])) {
+			wp_redirect(home_url());
+		}
 		ob_start();
 		include_once TRANSCRIBE_PLUGIN_DIR . 'template-parts/files/content-update.php';
 		return ob_get_clean();
