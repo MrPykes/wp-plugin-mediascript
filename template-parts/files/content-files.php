@@ -7,10 +7,15 @@
     </thead>
     <tbody>
         <?php
+        global $post;
         $uploads_dir = trailingslashit(wp_upload_dir()['basedir']) . 'transcribe';
         $args = array(
-            'post_type' => 'transcribe'
+            'post_type' => 'transcribe',
+            'author__in' => array(get_current_user_id())
         );
+        // echo "<pre>qwe ";
+        // print_r();
+        // echo "</pre>";
         $query = new WP_Query($args);
         if ($query->have_posts()) {
             while ($query->have_posts()) {

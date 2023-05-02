@@ -51,6 +51,8 @@ class Transcribe_Settings
 		add_action('admin_menu', array($this, 'register_transcribe_page'));
 		add_action('init', array($this, 'register_custom_post_type'));
 		add_action('init', array($this, 'create_custom_role'));
+		// add_action('init', array($this, 'user_role_restricted'));
+		// add_action('after_setup_theme', array($this, 'remove_admin_bar'));
 	}
 
 	function create_custom_role()
@@ -72,11 +74,26 @@ class Transcribe_Settings
 			'manage_categories' => true,
 		));
 	}
+	function remove_admin_bar()
+	{
+		if (!current_user_can('administrator') && !is_admin()) {
+			show_admin_bar(false);
+		}
+	}
+	function user_role_restricted()
+	{
+		if (is_admin() && !defined('DOING_AJAX') && (current_user_can('staff') || current_user_can('uploader'))) {
+			wp_redirect(home_url());
+			exit;
+		}
+	}
+
 	function register_custom_post_type()
 	{
 		$transcibe = array(
-			'public' => false,
+			'public' => true,
 			'label'	 => __('Transcibe', 'transcribe'),
+			'supports' => array('title', 'editor', 'thumbnail', 'comments', 'author'),
 		);
 		register_post_type('transcribe', $transcibe);
 	}
@@ -120,7 +137,29 @@ class Transcribe_Settings
 	}
 	function transcribe_page()
 	{
-		echo "test";
+		// ob_start();
+		// include_once TRANSCRIBE_PLUGIN_DIR . 'template-parts/files/content-files.php';
+		// echo ob_get_clean();
+		// ob_start();
+		// echo '<div class="wrap"><h2>All File List</h2>';
+		// echo '<form method="POST">';
+		// // $uploader_all_file_list = new Uploader_All_File_List_Table();
+		// // $uploader_all_file_list->prepare_items();
+		// // $uploader_all_file_list->display();
+		// $transcribe_list_table = new Transcribe_List_Table();
+		// $transcribe_list_table->prepare_items();
+		// $transcribe_list_table->display();
+		// echo ' </form>';
+		$transcribe_list_table = new Transcribe_List_Table();
+		$transcribe_list_table->prepare_items();
+?>
+		<div class="wrap">
+			<h1><?php _e('Transcribes', 'transcribe'); ?></h1>
+			<form method="post">
+				<?php $transcribe_list_table->display(); ?>
+			</form>
+		</div>
+<?php
 	}
 	function add_new_transcribe_page()
 	{

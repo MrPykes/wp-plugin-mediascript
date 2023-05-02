@@ -1,8 +1,8 @@
 <?php
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) exit;
-if ( ! class_exists( 'Transcribe' ) ) :
+if (!defined('ABSPATH')) exit;
+if (!class_exists('Transcribe')) :
 
 	/**
 	 * Main Transcribe Class.
@@ -12,7 +12,8 @@ if ( ! class_exists( 'Transcribe' ) ) :
 	 * @since		1.0.0
 	 * @author		ed
 	 */
-	final class Transcribe {
+	final class Transcribe
+	{
 
 		/**
 		 * The real instance
@@ -40,6 +41,14 @@ if ( ! class_exists( 'Transcribe' ) ) :
 		 * @var		object|Transcribe_Settings
 		 */
 		public $settings;
+		/**
+		 * TRANSCRIBE settings object.
+		 *
+		 * @access	public
+		 * @since	1.0.0
+		 * @var		object|Uploaders_File_List_Table_Function
+		 */
+		public $uploaders_table;
 
 		/**
 		 * Throw error on object clone.
@@ -50,8 +59,9 @@ if ( ! class_exists( 'Transcribe' ) ) :
 		 * @since	1.0.0
 		 * @return	void
 		 */
-		public function __clone() {
-			_doing_it_wrong( __FUNCTION__, __( 'You are not allowed to clone this class.', 'transcribe' ), '1.0.0' );
+		public function __clone()
+		{
+			_doing_it_wrong(__FUNCTION__, __('You are not allowed to clone this class.', 'transcribe'), '1.0.0');
 		}
 
 		/**
@@ -61,8 +71,9 @@ if ( ! class_exists( 'Transcribe' ) ) :
 		 * @since	1.0.0
 		 * @return	void
 		 */
-		public function __wakeup() {
-			_doing_it_wrong( __FUNCTION__, __( 'You are not allowed to unserialize this class.', 'transcribe' ), '1.0.0' );
+		public function __wakeup()
+		{
+			_doing_it_wrong(__FUNCTION__, __('You are not allowed to unserialize this class.', 'transcribe'), '1.0.0');
 		}
 
 		/**
@@ -76,13 +87,15 @@ if ( ! class_exists( 'Transcribe' ) ) :
 		 * @static
 		 * @return		object|Transcribe	The one true Transcribe
 		 */
-		public static function instance() {
-			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof Transcribe ) ) {
+		public static function instance()
+		{
+			if (!isset(self::$instance) && !(self::$instance instanceof Transcribe)) {
 				self::$instance					= new Transcribe;
 				self::$instance->base_hooks();
 				self::$instance->includes();
 				self::$instance->helpers		= new Transcribe_Helpers();
 				self::$instance->settings		= new Transcribe_Settings();
+				self::$instance->uploaders_table		= new Uploaders_File_List_Table_Function();
 
 				//Fire the plugin logic
 				new Transcribe_Run();
@@ -91,7 +104,7 @@ if ( ! class_exists( 'Transcribe' ) ) :
 				 * Fire a custom action to allow dependencies
 				 * after the successful plugin setup
 				 */
-				do_action( 'TRANSCRIBE/plugin_loaded' );
+				do_action('TRANSCRIBE/plugin_loaded');
 			}
 
 			return self::$instance;
@@ -104,11 +117,16 @@ if ( ! class_exists( 'Transcribe' ) ) :
 		 * @since   1.0.0
 		 * @return  void
 		 */
-		private function includes() {
+		private function includes()
+		{
 			require_once TRANSCRIBE_PLUGIN_DIR . 'core/includes/classes/class-transcribe-helpers.php';
 			require_once TRANSCRIBE_PLUGIN_DIR . 'core/includes/classes/class-transcribe-settings.php';
 
 			require_once TRANSCRIBE_PLUGIN_DIR . 'core/includes/classes/class-transcribe-run.php';
+			require_once TRANSCRIBE_PLUGIN_DIR . 'core/includes/classes/class-uploader-files-list-table-functions.php';
+
+			require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
+			require_once TRANSCRIBE_PLUGIN_DIR . 'core/includes/classes/class-uploaders-all-files-list-table.php';
 		}
 
 		/**
@@ -118,8 +136,9 @@ if ( ! class_exists( 'Transcribe' ) ) :
 		 * @since   1.0.0
 		 * @return  void
 		 */
-		private function base_hooks() {
-			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
+		private function base_hooks()
+		{
+			add_action('plugins_loaded', array(self::$instance, 'load_textdomain'));
 		}
 
 		/**
@@ -129,10 +148,10 @@ if ( ! class_exists( 'Transcribe' ) ) :
 		 * @since   1.0.0
 		 * @return  void
 		 */
-		public function load_textdomain() {
-			load_plugin_textdomain( 'transcribe', FALSE, dirname( plugin_basename( TRANSCRIBE_PLUGIN_FILE ) ) . '/languages/' );
+		public function load_textdomain()
+		{
+			load_plugin_textdomain('transcribe', FALSE, dirname(plugin_basename(TRANSCRIBE_PLUGIN_FILE)) . '/languages/');
 		}
-
 	}
 
 endif; // End if class_exists check.

@@ -193,6 +193,7 @@ class Transcribe_Run
 			$args = array(
 				'post_title' => $title,
 				'post_type' => 'transcribe',
+				'post_author' => get_current_user_id(),
 				'post_status' => 'publish',
 				'meta_input'        => array(
 					'file_name'     => $fileUploadName,
@@ -245,6 +246,7 @@ class Transcribe_Run
 			'ID'            => $id,
 			'post_title' => $file_name,
 			'post_type' => 'transcribe',
+			'post_author' => get_current_user_id(),
 			'post_status' => 'publish',
 			'meta_input'        => array(
 				'duration'     => array(
