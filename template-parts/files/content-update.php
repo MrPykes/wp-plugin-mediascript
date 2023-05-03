@@ -1,4 +1,4 @@
-<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" name="UpdateForm" id="UpdateForm" enctype="multipart/form-data">
+<form action="<?php echo esc_url(admin_url('admin-ajax.php')); ?>" method="POST" name="UpdateForm" id="UpdateForm" enctype="multipart/form-data">
     <h2 class="UploadFilesTitle">Update Files</h2>
     <table id="FileInputDetails" class="">
         <thead>
@@ -24,7 +24,6 @@
             $hour = $duration['hour'];
             $minute = $duration['minute'];
             $second = $duration['second'];
-
             ?>
             <tr>
                 <td>

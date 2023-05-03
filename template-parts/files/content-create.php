@@ -1,4 +1,4 @@
-<form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" name="UploadForm" id="UploadForm" enctype="multipart/form-data">
+<form action="<?php echo esc_url(admin_url('admin-ajax.php')); ?>" method="POST" name="UploadForm" id="UploadForm" enctype="multipart/form-data">
     <h2 class="UploadFilesTitle">Upload Files</h2>
     <input class="button" type="file" name="FileInput[]" id="FileInput" onchange="FileInputHandler(this);" multiple />
     <table id="FileInputDetails" class="hide">

@@ -3,7 +3,6 @@ $user = wp_get_current_user();
 $args_ = array();
 $roles = (array) $user->roles;
 if ($roles[0] == 'staff') {
-    printf('<a href="/files/new">Add New</a>');
     $args_['meta_query'] = array(
         array(
             'key' => 'assigned_staff_user',
@@ -12,6 +11,7 @@ if ($roles[0] == 'staff') {
         )
     );
 } elseif (($roles[0] == 'uploader')) {
+    printf('<a href="/files/new">Add New</a>');
     $args_['author__in'] = array(get_current_user_id());
 }
 ?>

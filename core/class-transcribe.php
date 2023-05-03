@@ -123,6 +123,7 @@ if (!class_exists('Transcribe')) :
 			require_once TRANSCRIBE_PLUGIN_DIR . 'core/includes/classes/class-transcribe-settings.php';
 
 			require_once TRANSCRIBE_PLUGIN_DIR . 'core/includes/classes/class-transcribe-run.php';
+
 			require_once TRANSCRIBE_PLUGIN_DIR . 'core/includes/classes/class-uploader-files-list-table-functions.php';
 
 			require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');

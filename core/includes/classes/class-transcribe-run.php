@@ -52,11 +52,11 @@ class Transcribe_Run
 		add_shortcode('add_page', array($this, 'add_page'));
 		add_shortcode('edit_page', array($this, 'edit_page'));
 
-		add_action('admin_post_nopriv_UploadForm', array($this, 'UploadForm_form_submit'));
-		add_action('admin_post_UploadForm', array($this, 'UploadForm_form_submit'));
+		add_action('wp_ajax_nopriv_UploadForm', array($this, 'UploadForm_form_submit'));
+		add_action('wp_ajax_UploadForm', array($this, 'UploadForm_form_submit'));
 
-		add_action('admin_post_nopriv_UpdateForm', array($this, 'UpdateForm_form_submit'));
-		add_action('admin_post_UpdateForm', array($this, 'UpdateForm_form_submit'));
+		add_action('wp_ajax_nopriv_UpdateForm', array($this, 'UpdateForm_form_submit'));
+		add_action('wp_ajax_UpdateForm', array($this, 'UpdateForm_form_submit'));
 
 		add_action('admin_post_nopriv_SettingsForm', array($this, 'SettingsForm_form_submit'));
 		add_action('admin_post_SettingsForm', array($this, 'SettingsForm_form_submit'));
@@ -172,6 +172,9 @@ class Transcribe_Run
 
 	function UploadForm_form_submit()
 	{
+		// echo "<pre>";
+		// print_r($);
+		// echo "</pre>";
 		$temp_name = $_FILES['FileInput']['tmp_name'];
 		$fileInputName = $_FILES['FileInput']['name'];
 		$file_name = $_POST['file_name'];

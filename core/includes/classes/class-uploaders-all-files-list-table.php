@@ -16,10 +16,6 @@ class Transcribe_List_Table extends WP_List_Table
             'plural' => 'transcribes',
             'ajax' => false
         ));
-        // add_action('admin_action_edit', array($this, 'handle_custom_column_actions'));
-        // add_filter('manage_transcribe_posts_columns', array($this, 'manage_custom_columns'));
-        // add_action('manage_transcribe_posts_custom_column', array($this, 'manage_custom_column_content', 10, 2));
-        // add_filter('post_row_actions', array($this, 'manage_custom_column_actions', 10, 2));
     }
 
     // Define the columns
@@ -194,19 +190,6 @@ class Transcribe_List_Table extends WP_List_Table
                 return '';
         }
     }
-    // function column_staff_user($item)
-    // {
-    //     $staff_users = get_users(array('role' => 'staff'));
-    //     $assigned_user = get_post_meta($item['id'], 'assigned_staff_user', true);
-    //     $output = '<select name="staff_user[' . $item['id'] . ']">';
-    //     $output .= '<option value="">- None -</option>';
-    //     foreach ($staff_users as $staff_user) {
-    //         $selected = ($assigned_user == $staff_user->ID) ? 'selected="selected"' : '';
-    //         $output .= '<option value="' . $staff_user->ID . '" ' . $selected . '>' . $staff_user->display_name . '</option>';
-    //     }
-    //     $output .= '</select>';
-    //     return $output;
-    // }
 
     // Define the content of the title column
     function column_title($item)
